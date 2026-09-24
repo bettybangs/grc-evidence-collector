@@ -24,6 +24,29 @@ CONTROLS = {
     "ISO 27001:2022": ["A.8.32"],
 }
 
+# The specific rules the default branch must have to pass.
+REQUIRED_RULES = {
+    "restrict_deletions": "Nobody can delete the branch",
+    "block_force_pushes": "Nobody can rewrite the branch history",
+    "require_pull_request": "Every change must go through a pull request",
+}
+
+
+def rules_in_place(classic_protection, rulesets):
+    """Return which required rules are enforced, from either protection style."""
+    ruleset_types = {rule.get("type") for rule in rulesets or []}
+    classic = classic_protection or {}
+    has_classic = bool(classic)
+
+    return {
+        "restrict_deletions": "deletion" in ruleset_types
+        or (has_classic and not classic.get("allow_deletions", {}).get("enabled")),
+        "block_force_pushes": "non_fast_forward" in ruleset_types
+        or (has_classic and not classic.get("allow_force_pushes", {}).get("enabled")),
+        "require_pull_request": "pull_request" in ruleset_types
+        or "required_pull_request_reviews" in classic,
+    }
+
 
 def github_get(path, token):
     """Send a GET request to the GitHub API and return the response."""
@@ -99,13 +122,19 @@ def check_repo(repo, token):
         )
         return result
 
-    # Step 4: decide pass or fail.
-    if result["classic_protection"] or result["rulesets"]:
+    # Step 4: check each required rule, then decide pass or fail.
+    rules = rules_in_place(result["classic_protection"], result["rulesets"])
+    result["required_rules"] = rules
+    missing = [REQUIRED_RULES[name] for name, enforced in rules.items() if not enforced]
+    if not missing:
         result["status"] = "pass"
-        result["details"] = f"Default branch '{branch}' is protected."
-    else:
+        result["details"] = f"Default branch '{branch}' has all required protection rules."
+    elif len(missing) == len(REQUIRED_RULES):
         result["status"] = "fail"
         result["details"] = f"Default branch '{branch}' has no protection rules."
+    else:
+        result["status"] = "fail"
+        result["details"] = f"Default branch '{branch}' is missing: " + "; ".join(missing)
     return result
 
 

@@ -11,8 +11,9 @@ as timestamped JSON.
 
 Each run records one of these results:
 
-- `pass`: the default branch is protected (classic branch protection or a ruleset)
-- `fail`: the default branch has no protection rules
+- `pass`: the default branch blocks deletions and force pushes, and requires
+  pull requests (via classic branch protection or a ruleset)
+- `fail`: one or more of those rules is missing; `details` lists which
 - `not_applicable`: branch protection isn't available (free-plan private repos)
 - `error`: the check couldn't complete; the reason is in `details`
 
