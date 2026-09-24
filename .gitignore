@@ -5,3 +5,5 @@
 __pycache__/
 *.pyc
 .venv/
+# Local evidence runs (curated samples live in examples/)
+evidence/

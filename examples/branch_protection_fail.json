@@ -1,0 +1,53 @@
+{
+  "check": "github_default_branch_protection",
+  "collected_at": "2026-09-24T15:59:58.905556+00:00",
+  "source": "GitHub REST API",
+  "controls": {
+    "NIST SP 800-53": [
+      "CM-3"
+    ],
+    "SOC 2": [
+      "CC8.1"
+    ],
+    "ISO 27001:2022": [
+      "A.8.32"
+    ]
+  },
+  "result": {
+    "repository": "bettybangs/grc-evidence-collector",
+    "default_branch": "main",
+    "status": "fail",
+    "details": "Default branch 'main' is missing: Every change must go through a pull request",
+    "classic_protection": {},
+    "rulesets": [
+      {
+        "type": "deletion",
+        "ruleset_source_type": "Repository",
+        "ruleset_source": "bettybangs/grc-evidence-collector",
+        "ruleset_id": 23948403
+      },
+      {
+        "type": "non_fast_forward",
+        "ruleset_source_type": "Repository",
+        "ruleset_source": "bettybangs/grc-evidence-collector",
+        "ruleset_id": 23948403
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": false,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": []
+        },
+        "ruleset_source_type": "Repository",
+        "ruleset_source": "bettybangs/grc-evidence-collector",
+        "ruleset_id": 23948403
+      }
+    ],
+    "required_rules": {
+      "restrict_deletions": true,
+      "block_force_pushes": true,
+      "require_pull_request": false
+    }
+  }
+}

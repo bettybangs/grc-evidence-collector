@@ -1,0 +1,62 @@
+{
+  "check": "github_default_branch_protection",
+  "collected_at": "2026-09-24T16:09:10.813525+00:00",
+  "source": "GitHub REST API",
+  "controls": {
+    "NIST SP 800-53": [
+      "CM-3"
+    ],
+    "SOC 2": [
+      "CC8.1"
+    ],
+    "ISO 27001:2022": [
+      "A.8.32"
+    ]
+  },
+  "result": {
+    "repository": "bettybangs/grc-evidence-collector",
+    "default_branch": "main",
+    "status": "pass",
+    "details": "Default branch 'main' has all required protection rules.",
+    "classic_protection": {},
+    "rulesets": [
+      {
+        "type": "deletion",
+        "ruleset_source_type": "Repository",
+        "ruleset_source": "bettybangs/grc-evidence-collector",
+        "ruleset_id": 23948403
+      },
+      {
+        "type": "non_fast_forward",
+        "ruleset_source_type": "Repository",
+        "ruleset_source": "bettybangs/grc-evidence-collector",
+        "ruleset_id": 23948403
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        },
+        "ruleset_source_type": "Repository",
+        "ruleset_source": "bettybangs/grc-evidence-collector",
+        "ruleset_id": 23948403
+      }
+    ],
+    "required_rules": {
+      "restrict_deletions": true,
+      "block_force_pushes": true,
+      "require_pull_request": true
+    }
+  }
+}
