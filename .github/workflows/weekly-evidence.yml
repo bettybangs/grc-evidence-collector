@@ -1,0 +1,40 @@
+# Collects compliance evidence every week and keeps it as a downloadable
+# artifact on the workflow run.
+name: Weekly evidence collection
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"  # Every Monday at 09:00 UTC
+  workflow_dispatch:      # Adds a "Run workflow" button for manual runs
+
+# The workflow's own built-in token only needs to read the code.
+permissions:
+  contents: read
+
+jobs:
+  branch-protection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check default-branch protection
+        env:
+          GITHUB_TOKEN: ${{ secrets.EVIDENCE_TOKEN }}
+        run: python check_branch_protection.py ${{ github.repository }}
+
+      - name: Save evidence
+        if: always()  # Keep the evidence even when the check fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-${{ github.run_id }}
+          path: evidence/
+          retention-days: 90
