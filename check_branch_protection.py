@@ -146,7 +146,7 @@ def main():
 
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
-        print("GITHUB_TOKEN is not set. Run: export GITHUB_TOKEN=your_token_here")
+        print("GITHUB_TOKEN is not set. See the Setup section of README.md.")
         sys.exit(1)
 
     collected_at = datetime.now(timezone.utc)
@@ -174,6 +174,11 @@ def main():
 
     print(f"{repo}: {result['status']} - {result['details']}")
     print(f"Evidence saved to {filename}")
+
+    # Exit with code 1 on fail or error so automated runs (like GitHub Actions)
+    # show a red X. The evidence file is always saved first.
+    if result["status"] in ("fail", "error"):
+        sys.exit(1)
 
 
 if __name__ == "__main__":
