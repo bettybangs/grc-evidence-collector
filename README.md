@@ -75,7 +75,7 @@ python check_iam_mfa.py
 
 Evidence is saved to `evidence/github_branch_protection_<timestamp>.json` and
 `evidence/aws_iam_mfa_<timestamp>.json`. Each script exits with code 1 on `fail` or `error`, after saving the evidence.
-See `examples/` for a sample `fail` and `pass`.
+See `examples/` for sample `fail` and `pass` results from real runs.
 
 ## Automated weekly run
 
