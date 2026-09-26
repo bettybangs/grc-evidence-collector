@@ -35,6 +35,34 @@ jobs:
         if: always()  # Keep the evidence even when the check fails
         uses: actions/upload-artifact@v7
         with:
-          name: evidence-${{ github.run_id }}
+          name: evidence-branch-protection-${{ github.run_id }}
+          path: evidence/
+          retention-days: 90
+
+  iam-mfa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check IAM users for MFA
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: python check_iam_mfa.py
+
+      - name: Save evidence
+        if: always()  # Keep the evidence even when the check fails
+        uses: actions/upload-artifact@v7
+        with:
+          name: evidence-iam-mfa-${{ github.run_id }}
           path: evidence/
           retention-days: 90

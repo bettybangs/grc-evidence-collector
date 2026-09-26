@@ -1,0 +1,34 @@
+{
+  "check": "aws_iam_user_mfa",
+  "collected_at": "2026-09-26T23:00:16.970776+00:00",
+  "source": "AWS IAM API",
+  "controls": {
+    "NIST SP 800-53": [
+      "IA-2(1)",
+      "IA-2(2)"
+    ],
+    "SOC 2": [
+      "CC6.1"
+    ],
+    "ISO 27001:2022": [
+      "A.8.5"
+    ]
+  },
+  "result": {
+    "status": "pass",
+    "details": "Root user and all 0 console user(s) have MFA. 1 API-only user(s) listed for review.",
+    "root_mfa_enabled": true,
+    "users": [
+      {
+        "user_name": "grc-evidence-collector",
+        "created": "2026-09-26T22:03:18+00:00",
+        "console_access": false,
+        "mfa_enabled": false
+      }
+    ],
+    "console_users_without_mfa": [],
+    "api_only_users": [
+      "grc-evidence-collector"
+    ]
+  }
+}
