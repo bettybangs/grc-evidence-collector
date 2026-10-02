@@ -1,7 +1,15 @@
 # grc-evidence-collector
 
+[![Weekly evidence collection](https://github.com/bettybangs/grc-evidence-collector/actions/workflows/weekly-evidence.yml/badge.svg)](https://github.com/bettybangs/grc-evidence-collector/actions/workflows/weekly-evidence.yml)
+
 Python scripts that pull compliance evidence from systems of record and save it
-as timestamped JSON.
+as timestamped JSON. This is a small proof of concept for continuous control
+monitoring: two checks, run weekly, with control mappings that are hardcoded
+and verified rather than AI-generated.
+
+Companion project: [Risk Whisperer](https://github.com/bettybangs/Risk-Whisperer)
+assesses controls from a written system description; this repo checks that
+specific technical controls are actually enforced.
 
 ## Checks
 
@@ -31,6 +39,38 @@ Users without a console password (API-only, like the script's own user) can't
 sign in with MFA, so they're listed under `api_only_users` for review instead
 of failing the check. Evidence records user names and dates only, not ARNs,
 so the AWS account ID stays out of the files.
+
+## Example: a failed check, then a pass
+
+Both files are real runs against this repository (see `examples/`).
+
+The first run failed. The default branch blocked deletions and force pushes,
+but did not require pull requests:
+
+```json
+{
+  "check": "github_default_branch_protection",
+  "collected_at": "2026-09-24T15:59:58.905556+00:00",
+  "controls": {
+    "NIST SP 800-53": ["CM-3"],
+    "SOC 2": ["CC8.1"],
+    "ISO 27001:2022": ["A.8.32"]
+  },
+  "result": {
+    "status": "fail",
+    "details": "Default branch 'main' is missing: Every change must go through a pull request",
+    "required_rules": {
+      "restrict_deletions": true,
+      "block_force_pushes": true,
+      "require_pull_request": false
+    }
+  }
+}
+```
+
+After the pull request rule was added, the next run passed
+(`"status": "pass"`, `"require_pull_request": true`). The full files also
+record the raw rulesets, so an auditor can see exactly what was evaluated.
 
 ## Setup
 
