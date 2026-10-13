@@ -129,3 +129,5 @@ Actions**), with the same read-only permissions as above:
 
 - `EVIDENCE_TOKEN`: the GitHub token
 - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`: the SecurityAudit user's key
+
+Copyright (c) 2026 Beth Gerharts. All rights reserved.
